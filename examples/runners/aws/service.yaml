@@ -1,0 +1,37 @@
+Description:
+  name: nordstromdot/yac-runner
+  default-alias: yac-runner
+  summary: A script-type gitlab runner optimized for yac-based builds
+  details:
+  - Creates a cloud formation stack for a GitLab runner
+  - Runner is hosted on an EC2 instnace in an ASG
+  - Build steps are as follows ...
+  - Create credentials for the AWS account you want to build the runner in as ...
+    - $ yac creds examples/runners/aws/service.yaml aws
+    - command will prompt you for an account name
+  - Next, build the runner stack as ...
+    - $ yac stack examples/runners/aws/service.yaml
+    - notes... command will prompt you for ...
+      - environment (dev || stage || prod)
+      - GitLab host url (e.g. https://gitlab.nordstrom.com)
+      - a runner registration token
+        - token can be group-scoped or project-scoped
+      - name of ssh key pair (for ssh'ing onto EC2 instance)
+        - user is 'ubuntu', so ssh as $ ssh -i <key.pem> ubuntu@<ip>
+      - GitLab version (best practice is typically to match to version of the host chosen)
+  - the runner stack will then build
+  - confirm via the GitLab UI that runner is registered and ready for use
+    via <group or project>->Settings->CI/CD->'Runners settings'
+  maintainer:
+    name: DevOps Tools
+    email: tech_dot_support@nordstrom.com
+  repo: https://gitlab.nordstrom.com/DOTS/yac
+  tags:
+  - gitlab
+  - runner
+  - yac
+  version: '1.0'
+includes:
+  stuff:
+    comment: stack, inputs, iam roles, credentialer
+    value: "includes.yaml"

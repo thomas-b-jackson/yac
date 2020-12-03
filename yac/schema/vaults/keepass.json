@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Secret Source",
+  "description": "keepass vault configs",
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "comment": {
+      "type": ["string","array"],
+      "title": "Vault Comment",
+      "description": "An explanation of the vault.",
+      "examples": [
+        "vault is in a local file"
+      ]
+    },
+    "vault-path": {
+      "type": "string",
+      "title": "Vault Path",
+      "description": "The path to the keepass vault.",
+      "default": "",
+      "examples": [
+        "/var/local/my_vault.kbx"
+      ]
+    },
+    "vault-pwd-path": {
+      "type": "string",
+      "title": "Vault Password Path",
+      "description": "The path to the file containing the password to the keepass vault.",
+      "default": "",
+      "examples": [
+        "/var/local/keepass.pwd"
+      ]
+    },
+    "vault-pwd": {
+      "type": ["string","object"],
+      "title": "Vault Password",
+      "description": "The password to the keepass vault.",
+      "default": "",
+      "examples": [
+        "open_sesame", {"yac-ref": "vault-pwd"}
+      ]
+    }
+  }
+}

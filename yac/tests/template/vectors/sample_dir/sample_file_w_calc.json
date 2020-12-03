@@ -1,0 +1,4 @@
+{
+	"name": {"yac-ref":"user-fname"},
+	"lname": {"yac-calc": ["b64enc","testing"]}
+}

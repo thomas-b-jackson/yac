@@ -1,0 +1,11 @@
+{
+  "Type" : "AWS::AutoScaling::LaunchConfiguration",
+  "Properties" : {
+    "KeyName" : {"yac-ref" : "ssh-key"},
+    "SecurityGroups": [{"Fn::GetAtt": ["MyAppSG","GroupId"]}],
+    "ImageId": { "yac-ref" : "ami-id" },
+    "InstanceType": { "yac-ref": "instance-type" },
+    "AssociatePublicIpAddress": false,
+    "UserData" : { "Fn::Base64": { "Fn::Join" : ["", {"yac-calc": ["ec2-boot","config/boot.sh"]} ] } }
+  }
+}

@@ -1,0 +1,50 @@
+Params:
+  image-name:
+    comments: name in the gitlab registry
+    value: gitlab-registry.nordstrom.com/jacksonthomas/yac-bootstrap/mynginx
+  nginx-label:
+    comments: the label of the desired nginx image in docker hub
+    value: 'stable'
+  image-label-suffix:
+    comments: for mods to dockerfile
+    value: '.1'
+Stack:
+  type: kubernetes
+  deployments:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: {'yac-name': ''}
+      labels:
+        app: {'yac-ref': 'service-alias'}
+        env: {'yac-ref': 'env'}
+    spec:
+      replicas: {'yac-ref': 'horizontal-scale'}
+      selector:
+        matchLabels:
+          app: {'yac-ref': 'service-alias'}
+          env: {'yac-ref': 'env'}
+      template:
+        metadata:
+          labels:
+            app: {'yac-ref': 'service-alias'}
+            env: {'yac-ref': 'env'}
+        spec:
+          securityContext:
+            fsGroup: 10001
+            runAsUser: 10001
+          containers:
+          - name: mynginx
+            image: {'yac-join': ['',[{'yac-ref': 'image-name'},':',{'yac-ref': 'nginx-label'}, {'yac-ref': 'image-label-suffix'}]]}
+            ports:
+            - containerPort: 8080
+            volumeMounts:
+            - name: cache
+              mountPath: /var/cache/nginx
+            - name: var-run
+              mountPath: /var/run
+          volumes:
+          - name: cache
+            emptyDir: {}
+          - name: var-run
+            emptyDir: {}

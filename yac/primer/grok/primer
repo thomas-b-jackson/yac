@@ -1,0 +1,28 @@
+
+YAC - Your Automated Cloud v{VER}
+{COMMAND}
+
+Available comands include:
+
+  yac {COMMAND} (-h | primer)
+
+* -h provides cli help
+* primer will display this page
+
+Test drive, view, and export service examples.
+
+The examples are a suite of yac services designed to bring you up to speed on key yac concepts
+
+You can view all the examples by running:
+
+$ yac grok
+
+The command will generate a list of examples available for exploration.
+
+You can get details on a specific on a specific service example using the -x arg, e.g.:
+
+$ yac grok -x examples/inputs/caching/service.json
+
+You can export an example so you can easily make and test changes to the servie, e.g.:
+
+$ yac grok -x examples/inputs/caching/service.json -e

@@ -1,0 +1,6 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "IntrinsicsInputTypes",
+  "description": "Data types that can be input into the apply_instrincs fxn",
+  "type": ["object","array","string"]
+}

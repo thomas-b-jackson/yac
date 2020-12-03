@@ -1,0 +1,72 @@
+{
+	"stack": [
+		{
+			"key": "aws-cloudformation",
+			"module": "yac/lib/stacks/aws/stack.py",
+			"class": "AWSStack"
+		},
+		{
+			"key": "kubernetes",
+			"module": "yac/lib/stacks/k8s/stack.py",
+			"class": "K8sStack"
+		}
+	],
+	"artifact": [
+		{
+			"key": "ami",
+			"module": "yac/lib/makers/ami.py",
+			"class": "AMI"
+		},
+		{
+			"key": "container-image",
+			"module": "yac/lib/makers/container_image.py",
+			"class": "ContainerImage"
+		}
+	],
+	"credentialer": [
+		{
+			"key": "nordstrom-aws",
+			"module": "yac/lib/stacks/aws/credentials.py",
+			"class": "NordstromAWSCredentialer"
+		},
+		{
+			"key": "nordstrom-k8s",
+			"module": "yac/lib/stacks/k8s/credentials.py",
+			"class": "NordstromK8sCredentialer"
+		}
+	],
+	"vault": [
+		{
+			"key": "s3",
+			"module": "yac/lib/vaults/s3.py",
+			"class": "S3Vault"
+		},
+		{
+			"key": "file",
+			"module": "yac/lib/vaults/file.py",
+			"class": "FileVault"
+		},
+		{
+			"key": "b64",
+			"module": "yac/lib/vaults/b64.py",
+			"class": "B64Vault"
+		},
+		{
+			"key": "keepass",
+			"module": "yac/lib/vaults/keepass.py",
+			"class": "KeepassVault"
+		}
+	],
+	"credentialer": [
+		{
+			"key": "nordstrom-aws",
+			"module": "yac/lib/stacks/aws/credentials.py",
+			"class": "NordstromAWSCredentialer"
+		},
+		{
+			"key": "nordstrom-k8s",
+			"module": "yac/lib/stacks/k8s/credentials.py",
+			"class": "NordstromK8sCredentialer"
+		}
+	]
+}

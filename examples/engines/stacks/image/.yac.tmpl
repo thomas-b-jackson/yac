@@ -1,0 +1,128 @@
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # allow docker to run in an interactive mode
+  DESKTOP=true
+  INTERACTIVE="-it"
+else
+  # assume we are running in a pipeline (where docker does not
+  #   allow interactive mode)
+  DESKTOP=false
+  INTERACTIVE=""
+fi
+
+# make sure the YACVER variable is set
+if [ -z "$YACVER" ]; then
+  YACVER={{YACVER}}
+fi
+
+# for running yac commands via a container
+function yac () {
+
+  command=$1
+  servicefile=$2
+  sub1=$3
+  sub2=$4
+  sub3=$5
+  sub4=$6
+  sub5=$7
+
+  servicefile_path=""
+
+  # if servicefile is a relative path, reset it to an absolute path so it
+  # can be found inside the container
+  if [ -f "$servicefile" ] && [[ ! "$servicefile" = /* ]]; then
+    servicefile=$(get_abs_filename $servicefile)
+  fi
+
+  # if servicefile is a file, set the servicefile path for use as a volume
+  # mount by the container
+  if [ -f "$servicefile" ]; then
+    servicefile_path=$(dirname $servicefile)
+    # echo "setting servicefile path to $servicefile_path"
+  fi
+
+  # if the servicefile is argument is registry reference, the path won't be set (the -z argument
+  # returns true for an emtpy string), so set path to user's current path.
+  if [ -z "$servicefile_path" ]; then
+    servicefile_path=$PWD
+  fi
+
+  # determine which (if any) docker config files the user is running
+  if [ -f "$HOME/.docker/config.json" ]; then
+    docker_config_path=$HOME/.docker/config.json
+  else
+    touch /tmp/.docker_config
+    docker_config_path=/tmp/.docker_config
+  fi
+
+  # export the servicefile path as the SF environment variable to simplify repeated yac calls
+  export SF=$servicefile
+  echo "exported the servicefile to the SF environment variable for future shorthand reference (i.e. yac creds \$SF aws)"
+
+  # determine which (if any) docker config files the user is running
+  if [ -f "$HOME/.docker/config.json" ]; then
+    docker_config_path=$HOME/.docker/config.json
+  else
+    touch /tmp/.docker_config
+    docker_config_path=/tmp/.docker_config
+  fi
+
+  # copy lan id to credentials location for use in credential generation
+  mkdir -p $HOME/.yac/credentials && echo $USER > $HOME/.yac/credentials/.lanid
+
+  # run yac via the yac container image in interactive mode with the following features:
+  #
+  # - mount the user's home directory for access to aws and k8s credentials and any other
+  #   'homey' stuff
+  # - mount the servicefile path for obvious reasons
+  # - include the users's editor env variable so any spawned editing sessions (e.g. for
+  #     secrets editing) employ the user's fav text editor
+  # - nullify the docker config files so the py-docker client doesn't try to use
+  #     the user's registry auth preferences (these are n/a inside the container)
+
+  docker run $INTERACTIVE -e EDITOR=$EDITOR -e HOME=$HOME \
+             -e DESKTOP=$DESKTOP \
+             -v $servicefile_path:$servicefile_path \
+             -v $HOME:$HOME \
+             -v /dev/null:$docker_config_path \
+             {{IMAGE_NAME}}:$YACVER \
+             yac $command $servicefile $sub1 $sub2 $sub3 $sub4 $sub5
+}
+
+# for running arbitrary commands inside a yac container (i.e. a yac destop!)
+function yacd () {
+
+  # determine which (if any) docker config files the user is running
+  if [ -f "$HOME/.docker/config.json" ]; then
+    docker_config_path=$HOME/.docker/config.json
+  else
+    touch /tmp/.docker_config
+    docker_config_path=/tmp/.docker_config
+  fi
+
+  # copy lan id to credentials location for use in credential generation
+  mkdir -p $HOME/.yac/credentials && echo $USER > $HOME/.yac/credentials/.lanid
+
+  # run yac via the yac container image in interactive mode with the following features:
+  #
+  # - mount the user's home directory for access to aws and k8s credentials and any other
+  #   'homey' stuff
+  # - mount the servicefile path for obvious reasons
+  # - include the users's editor env variable so any spawned editing sessions (e.g. for
+  #     secrets editing) employ the user's fav text editor
+  # - nullify the docker config files so the py-docker client doesn't try to use
+  #     the user's registry auth preferences (these are n/a inside the container)
+  docker run -it -e EDITOR=$EDITOR -e HOME=$HOME \
+             -e DESKTOP=$DESKTOP \
+             -v $HOME:$HOME \
+             -v /dev/null:$docker_config_path \
+             {{IMAGE_NAME}}:$YACVER \
+             bash
+}
+
+get_abs_filename() {
+  echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
+}
+
+export -f yac
+export -f yacd
+export -f get_abs_filename

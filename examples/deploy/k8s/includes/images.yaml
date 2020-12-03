@@ -1,0 +1,35 @@
+Description:
+  name: yac/container-image-example
+  default-alias: container-image-example
+  summary: Builds a PSP-compliant, nginx container-image and pushes to gitlab registry
+  maintainer:
+    name: DevOps Tools
+    email: tech_dot_support@nordstrom.com
+  repo: https://gitlab.nordstrom.com/DOTS/yac
+  tags:
+  - container-image
+  - build
+  version: '1.0'
+Artifacts:
+- type: container-image
+  name: mynginx
+  description: psp-compliant nginx
+  image:
+    dockerfile: "./docker/Dockerfile"
+    name:
+      yac-ref: image-name
+    label: {'yac-join': ['',[{'yac-ref': 'nginx-label'}, {'yac-ref': 'image-label-suffix'}]]}
+    build-args: []
+  registry:
+    host: https://gitlab-registry.nordstrom.com
+    username:
+      yac-calc:
+      - lib/calc_username.py
+    password:
+      yac-ref: personal-access-token
+  Inputs:
+  - key: personal-access-token
+    title: Personal Access Token
+    help: Your gitlab personal access token
+    type: password
+    required: true

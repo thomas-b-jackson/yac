@@ -1,0 +1,29 @@
+{
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "us-west-2",
+      "source_ami": {"yac-ref": "cis-hardened-ubuntu-ami"},
+      "instance_type": "t2.large",
+      "ssh_username": "ubuntu",
+      "ami_name": {"yac-calc": ["lib/calc_ami_name.py"]},
+      "force_deregister": true,
+      "ami_description": "Image Builder",
+      "vpc_id": {"yac-calc": ["vpc-id"]},
+      "subnet_id": {"yac-calc": ["subnet-id","internal","us-west-2a"]},
+      "tags": {
+        "application": "yac-builder",
+        "version": "1.0",
+        "os": "ubuntu",
+        "os_release": "16.04",
+        "Name": {"yac-calc": ["lib/calc_ami_name.py"]}
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "tmp/packer/builder.sh"
+    }
+  ]
+}

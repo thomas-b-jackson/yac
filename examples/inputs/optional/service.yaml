@@ -1,0 +1,27 @@
+Description:
+  name: yac/optional-inputs-example
+  default-alias: optional-inputs-example
+  summary: Demonstrates optional inputs via yac params
+  details:
+  - Inputs can be required or optional
+  - Each inputs must satisfy the schema at yac/schema/input.json
+  - try it out using ...
+  - $ yac params examples/inputs/optional/service.yaml
+  #
+  - Try exporting service and experiment with input required attribute
+Inputs:
+- key: color
+  title: Color
+  help: You hair color
+  type: string
+  required: false
+  options:
+  - black
+  - red
+  - brown
+  - other
+- key: pet
+  title: Pet
+  help: The name of your pet
+  type: string
+  required: false

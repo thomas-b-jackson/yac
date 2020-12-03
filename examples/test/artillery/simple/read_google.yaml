@@ -1,0 +1,11 @@
+config:
+  phases:
+    # duration is how long test should run in seconds
+    # arrivalRate is the number of new virtual users per second
+  - duration: 10
+    arrivalRate: 5
+scenarios:
+- name: read base url only
+  flow:
+  - get:
+      url: "/"

@@ -1,0 +1,22 @@
+config:
+  target: 'https://api.open-elevation.com'
+  phases:
+    # duration is how long test should run in seconds
+    # arrivalRate is the number of new virtual users per second
+    - duration: 10
+      arrivalRate: 2
+  # javascript file containing sources for generateLatLong() and showElevation()
+  processor: "./test-elevation-randomizer.js"
+scenarios:
+  # get elevations at random lat/lon coordinates
+  - name: "get elevations"
+    flow:
+      - function: generateLatLong
+      - get:
+          url: "/api/v1/lookup?locations={{latitude}},{{longitude}}"
+          capture:
+            # nab the evalation value from the endpoint response using JSONPath expression
+            json: "$.results[0].elevation"
+            # save to a local variable so it can be logged to console for troubleshooting
+            as: "elevation"
+          afterResponse: "showElevation"

@@ -1,0 +1,26 @@
+{
+  "Description": {
+    "name": "nordstrom/first-sub",
+    "default-alias": "first-sub",
+    "summary": "An included service. Doesn't do much."
+  },
+  "includes": {
+    "my-sub-sub": {
+      "comment": "Test sub",
+      "value": "sub_sub_service.json"
+    }
+  },
+  "Stack": {
+    "type": "aws-cloudformation",
+    "Resources": {
+      "task-definition-2": {
+        "containers": [
+          {
+            "name": "gitlab",
+            "image": "dot/gitlab:10.2"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+# This file is a template just to demonstrate that yac can be run from a gitlab runner.
+# see https://docs.gitlab.com/ce/ci/yaml/README.html for all available options
+
+build:
+  tags:
+   - yac
+  script:
+   - source .yac
+   - yac

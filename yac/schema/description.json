@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Description",
+  "description": "Service description",
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "required": [ "name", "default-alias" ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Service Name",
+      "description": "Name of the service, formatted as <organization>/<service>",
+      "default": "",
+      "examples": [
+        "nordstromdots/artifactory-fe", "platformengineering/stateless"
+      ]
+    },
+    "default-alias": {
+      "type": "string",
+      "title": "Default Alias",
+      "description": "The default alias to assign a service instance (drives resource naming)",
+      "default": "",
+      "examples": [
+        "artifactory","stateless-ex"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "title": "Service Version",
+      "description": "Service version, for use in sharing and consuming services via the registry",
+      "default": "",
+      "examples": [
+        "1.0.1",
+        "2.3"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "title": "Service Summary",
+      "description": "Summary description of the service",
+      "default": "",
+      "examples": [
+        "front end for artifactory",
+        "stateless archetype for k8s"
+      ]
+    },
+    "details": {
+      "type": "array",
+      "title": "Service Details",
+      "description": "Details description of the service (useful when evaluating services shared via the registry)",
+      "default": "",
+      "examples": [
+        ["* Artifactory HA in Kubernetes",
+         "* Single primary, multiple members nodes",
+         "* Multi-cluster active/active architecture"]
+      ]
+    },
+    "repo": {
+      "type": "string",
+      "title": "Repo",
+      "description": "URL suitable for use with a git clone of service sources",
+      "default": "",
+      "examples": [
+        "https://gitlab.nordstrom.com/DOTS/gitlab"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "title": "Service Tags",
+      "description": "Labels that can help categorize the type of service being offered (useful when evaluating services shared via the registry)",
+      "default": "",
+      "examples": [
+        ["ha","k8s","stateless","ingress"],
+        ["project-mgmt","ha","stateful"]
+      ]
+    },
+    "maintainer": {
+      "title": "Service Maintainer",
+      "description": "Describe who maintains the service",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "name", "email" ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Maintainer Name",
+          "description": "The name of the group that maintains the service sources",
+          "default": "",
+          "examples": [
+            "DevOps Tools"
+          ]
+        },
+        "email": {
+          "type": "string",
+          "title": "Maintainer Email Address",
+          "description": "The email address of the group that maintains the service sources",
+          "default": "",
+          "examples": [
+            "tech_dot_support@nordstrom.com"
+          ]
+        }
+      }
+    }
+  }
+}
+

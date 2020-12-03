@@ -1,0 +1,32 @@
+Description:
+  name: yac/conditional-inputs-example
+  default-alias: conditional-inputs-example
+  summary: Demonstrates conditional inputs via yac params
+  details:
+  - Inputs can be conditioned on the state of other inputs.
+  - Each inputs must satisfy the schema at yac/schema/input.json
+  - try it out using ...
+  - $ yac params examples/inputs/conditional/service.yaml
+  #
+  - Next try exporting service and experiment with input conditionals
+Inputs:
+- key: color
+  title: Color
+  help: You hair color (for funsies, enter 'red')
+  type: string
+  required: true
+  options:
+  - black
+  - red
+  - brown
+  - other
+- key: loyalty
+  title: Loyalty
+  help: We have reason to trust your loyalty. Can we trust you?
+  type: string
+  required: true
+  options:
+  - y
+  - n
+  conditions:
+    kvps: color:red

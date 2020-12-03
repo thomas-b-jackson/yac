@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Tasks",
+  "description": "A list of tasks associated with a service",
+  "type": "array",
+  "definitions": {},
+  "items": {
+    "type": "object",
+    "title": "Task",
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string",
+        "title": "Task Name",
+        "description": "The name of the task.",
+        "default": "",
+        "examples": [
+          "setup"
+        ]
+      },
+      "description": {
+        "type": "string",
+        "title": "Task Description",
+        "description": "The description for what the task does",
+        "default": "",
+        "examples": [
+          "Setup artifactory repos"
+        ]
+      },
+      "module": {
+        "type": "string",
+        "title": "Task Module",
+        "description": "The python file containing the task's do_task() function",
+        "default": "",
+        "examples": ["lib/setup.py"]
+      },
+      "Inputs": {
+        "type": "array",
+        "title": "Task Inputs",
+        "description": "Inputs needed for the task, per schema/inputs.json."
+      }
+    }
+  }
+}

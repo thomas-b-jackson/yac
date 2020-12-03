@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "GCP Stack",
+  "description": "A GCP stack",
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "title": "The Stack Type",
+      "description": "For aws, type == 'gcp-cloudmanager'",
+      "examples": [
+        "aws-cloudmanager"
+      ]
+    },
+    "Parameters": {
+      "type": "object",
+      "title": "Parameters",
+      "description": "Parameters needed for the stack, per cloud manager."
+    },
+    "Resources": {
+      "type": "object",
+      "title": "Resources",
+      "description": "Resources needed for the stack, per cloud manager."
+    },
+    "Conditions": {
+      "type": "object",
+      "title": "Conditions",
+      "description": "Conditions needed for the stack, per cloud manager."
+    }
+  }
+}
+

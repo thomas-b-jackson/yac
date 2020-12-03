@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Inputs Cacher",
+  "description": "For controlling the caching of user inputs",
+
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "required": [ "enabled" ],
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "title": "Enabled",
+      "description": "Enable inputs caching",
+      "default": "",
+      "examples": [
+        [true,false]
+      ]
+    },
+    "path": {
+      "type": "string",
+      "title": "Path",
+      "description": "Optional path to where inputs should be cached",
+      "default": "~/.yac/<service name>",
+      "examples": ["/home/some/path"]
+    },
+    "exclusions": {
+      "type": "array",
+      "title": "Exclusions",
+      "description": "Keys of inputs that should not be cached",
+      "default": "",
+      "examples": [ ["env"] ]
+    }
+  }
+}

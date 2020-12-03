@@ -1,0 +1,17 @@
+Description:
+  name: yac/gcp-engine-example
+  default-alias: gcp-engine-example
+  summary: Demonstrates how to add a new stack provider
+  details:
+  - Demonstrates the incubation of GCP as a yac stack provider
+  - Export, then check out README.me for image build instructions.
+  - Once your yac image is ready, uncomment the Stack stanza and run
+  -   yac stack against this servicefile.
+# Uncomment the stanza below once you've successfully build your image
+# Stack:
+#  type: gcp-cloudmanager
+#  Resources:
+#    MyAppIAMRole: {}
+#    MyAppASG: {}
+#    MyAppSG: {}
+#    MyAppLaunchConfig: {}

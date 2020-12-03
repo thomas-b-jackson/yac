@@ -1,0 +1,48 @@
+Credentialers:
+# creds for a human user
+- type: nordstrom-k8s
+  name: me
+  namespace:
+    yac-ref: namespace
+  clusters:
+  - nonprod
+  - prod1
+  Inputs:
+  - key: namespace
+    title: K8s Namespace
+    help: A namespace in the nonprod (hydrogen) and prod1 (hydrogen) clusters  you have
+      write access to
+    type: string
+    required: true
+
+# creds for builder service account
+- type: nordstrom-k8s
+  name: builder
+  namespace:
+    yac-ref: namespace
+  clusters:
+  - nonprod
+  - prod
+  tokens:
+  - yac-ref: builder-token-nonprod
+  - yac-ref: builder-token-prod
+  Secrets:
+    builder-token-nonprod:
+      comment: aritfactory master key
+      source: main
+      lookup:
+        path: myservice/builder/nonprod
+        field: password
+    builder-token-prod:
+      comment: aritfactory master key
+      source: main
+      lookup:
+        path: myservice/builder/prod
+        field: password
+  Inputs:
+  - key: namespace
+    title: K8s Namespace
+    help: A namespace in the nonprod (hydrogen) and prod1 (hydrogen) clusters  you have
+      write access to
+    type: string
+    required: true

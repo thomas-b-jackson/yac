@@ -1,0 +1,16 @@
+Description:
+  name: yac/runner-proj
+  default-alias: runner-proj
+  summary: Build trivial yac service via GitLab runner
+  details:
+  - Demonstrates how to setup a repo in Gitlab that is buildable by yac
+  - Steps are as follows ...
+  - Create a new project on a GitLab host
+  - Build and start a runner using examples/runner/aws/service.yaml
+  - Notes
+    - the runner token should enable it to build the project created above
+    - the resulting runner is hosted on an ec2 instance in an arbitrary aws account
+  - Next, export a local copy of the sources in this example using ...
+    - $ yac grok -v examples/runners/proj/service.yaml -x
+  - Add these sources to the new GitLab project
+  - Confirm the build has started from the GitLab CI/CD jobs UI

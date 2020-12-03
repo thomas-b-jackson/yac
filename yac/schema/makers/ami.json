@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "ami",
+  "description": "ami artifacts",
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "title": "The Artifact Type",
+      "description": "For ami, type == 'ami'",
+      "default": "",
+      "examples": [
+        "ami"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "title": "The Artifact Name",
+      "description": "Name of the artifact (used for building individual images via 'yac make')",
+      "default": "",
+      "examples": [
+        "gitlab","jira"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "title": "Artifact Description",
+      "description": "Description of the artifact (used for help messages when building individual images via 'yac make')",
+      "default": "",
+      "examples": [
+        "ami for gitlab"
+      ]
+    },
+    "profile": {
+      "type": "string",
+      "title": "AWS Profile",
+      "description": "The AWS profile to use in the ami construction (determines which credentials to use)",
+      "default": "",
+      "examples": [
+        "nonprod", "prod"
+      ]
+    },
+    "packer-file": {
+      "type": "string",
+      "title": "Packer File Path",
+      "description": "Relative path to the packerfile describing the ami (path is relative to Servicefile)",
+      "default": "",
+      "examples": [
+        "packer/gitlab.json"
+      ]
+    },
+    "Secrets": {
+      "type": "object",
+      "title": "Image Secrets",
+      "description": "Secrets needed for the build, per secrets.json."
+    },
+    "Inputs": {
+      "type": "array",
+      "title": "Image Inputs",
+      "description": "Inputs needed for the build, per inputs.json."
+    }
+  }
+}
+

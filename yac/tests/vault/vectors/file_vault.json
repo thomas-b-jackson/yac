@@ -1,0 +1,8 @@
+{
+	"secret1": "secret1 value",
+	"secret2": {
+		"dev": "dev value",
+		"prod": "prod value"
+	},
+	"secret3": ["val1", "val2"]
+}

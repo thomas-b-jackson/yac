@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Stack",
+  "description": "Kubernetes stack",
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "title": "Stack Type",
+      "description": "the stack type",
+      "examples": [
+        "Kubernetes"
+      ]
+    },
+    "configmaps": {
+      "type": ["array","object"],
+      "title": "ConfigMaps",
+      "description": "An array containing the configmaps needed for the stack, each formatted per kubernetes."
+    },
+    "secrets": {
+      "type": ["array","object"],
+      "title": "Secrets",
+      "description": "An array containing the secrets needed for the stack, each formatted per kubernetes."
+    },
+    "pvcs": {
+      "type": ["array","object"],
+      "title": "PVCs",
+      "description": "An array containing the pvcs (persistent volume claims) needed for the stack, each formatted per kubernetes."
+    },
+    "ingresses": {
+      "type": ["array","object"],
+      "title": "Ingresses",
+      "description": "An array containing the ingresses needed for the stack, each formatted per kubernetes."
+    },
+    "services": {
+      "type": ["array","object"],
+      "title": "Services",
+      "description": "An array containing the services needed for the stack, each formatted per kubernetes."
+    },
+    "deployments": {
+      "type": ["array","object"],
+      "title": "Deployments",
+      "description": "An array containing the deployments needed for the stack, each formatted per kubernetes."
+    },
+    "statefulsets": {
+      "type": ["array","object"],
+      "title": "StatefuleSets",
+      "description": "An array containing the statefulsets needed for the stack, each formatted per kubernetes."
+    },
+    "resources": {
+      "type": ["array","object"],
+      "title": "Resources",
+      "description": "An array containing generic resources stack, each formatted per kubernetes."
+    }
+  }
+}
+

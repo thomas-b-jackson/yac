@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Params",
+  "description": "yac-based paramater, for rendering via intrinsics and templates",
+  "type": "object",
+  "$id": "params",
+  "patternProperties": {
+    "(\\S)": {
+      "$id": "/properties/params/properties/param-key",
+      "type": "object",
+      "title": "Param Key",
+      "description": "The parameter key, referenced via intrinsics and templates",
+      "required": [ "value"],
+      "properties": {
+        "comment": {
+          "$id": "/properties/params/properties/param-key/properties/comment",
+          "type": ["string","array"],
+          "title": "Parameter Comment",
+          "description": "An explanation of the parameter.",
+          "default": "",
+          "examples": [
+            "The password for the db user",
+            ["The password for the db user","TODO: put password into a vault instead of a param"]
+          ]
+        },
+        "value": {
+          "$id": "/properties/params/properties/param-key/properties/value",
+          "type": ["object","string"],
+          "title": "Parameter Value",
+          "description": "The parameter value, rendered via intrinsics and templates",
+          "default": "",
+          "examples": [
+            "gitlab-s3"
+          ]
+        }
+      }
+    }
+  }
+}

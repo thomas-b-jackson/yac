@@ -1,0 +1,20 @@
+
+YAC - Your Automated Cloud v{VER}
+{COMMAND}
+
+Available comands include:
+
+  yac {COMMAND} (-h | primer)
+
+* -h provides api help
+* primer will display this page
+
+Teams maintain service blueprints/archetypes in the yac registry that demonstrate best practices for deploying and monitoring services on the engineering platform.
+
+To find available blueprints/archetypes, try searching for services with 'platform' in the organization name, e.g.:
+
+$ yac service --find=platform
+
+Members of the platformengineering teams share updated blueprints as:
+
+$ yac service --share <path to servicefile>

@@ -1,0 +1,60 @@
+{
+  "vault": [
+    {
+      "module": "yac/lib/vaults/s3.py",
+      "key": "s3",
+      "class": "S3Vault"
+    },
+    {
+      "module": "yac/lib/vaults/file.py",
+      "key": "file",
+      "class": "FileVault"
+    },
+    {
+      "module": "yac/lib/vaults/b64.py",
+      "key": "b64",
+      "class": "B64Vault"
+    },
+    {
+      "module": "yac/lib/vaults/keepass.py",
+      "key": "keepass",
+      "class": "KeepassVault"
+    }
+  ],
+  "credentialer": [
+    {
+      "module": "yac/lib/stacks/aws/credentials.py",
+      "key": "nordstrom-aws",
+      "class": "NordstromAWSCredentialer"
+    },
+    {
+      "module": "yac/lib/stacks/k8s/credentials.py",
+      "key": "nordstrom-k8s",
+      "class": "NordstromK8sCredentialer"
+    }
+  ],
+  "stack": [
+    {
+      "module": "yac/lib/stacks/aws/stack.py",
+      "key": "aws-cloudformation",
+      "class": "AWSStack"
+    },
+    {
+      "module": "yac/lib/stacks/k8s/stack.py",
+      "key": "kubernetes",
+      "class": "K8sStack"
+    }
+  ],
+  "artifact": [
+    {
+      "module": "yac/lib/makers/ami.py",
+      "key": "ami",
+      "class": "AMI"
+    },
+    {
+      "module": "yac/lib/makers/container_image.py",
+      "key": "container-image",
+      "class": "ContainerImage"
+    }
+  ]
+}

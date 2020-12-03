@@ -1,0 +1,22 @@
+- resource: pod
+  apiGroups: [""]
+- resource: secrets
+  apiGroups: [""]
+
+  verbs: ["create", "get", "list", "patch", "update", "watch"]
+
+# for building core resources
+- apiGroups: [""]
+  resources: [""]
+  candidate_resources: ["pods", "secrets", "configmaps", "services", "persistentvolumeclaims"]
+  verbs:     ["create", "get", "list", "patch", "update", "watch"]
+# for building ingresses (an extension to core)
+- apiGroups: ["extensions"]
+  resources: [""]
+  candidate_resources: ["ingresses"]
+  verbs:     ["create", "get", "list", "patch", "update", "watch"]
+# for building deployments (an app extention to core)
+- apiGroups: ["extensions", "apps"]
+  resources: [""]
+  candidate_resources: ["deployments"]
+  verbs:     ["create", "get", "list", "patch", "update", "watch"]

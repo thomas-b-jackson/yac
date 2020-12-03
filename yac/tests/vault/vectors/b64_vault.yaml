@@ -1,0 +1,7 @@
+secret1: c2VjcmV0MSB2YWx1ZQo=
+secret2:
+  dev: ZGV2IHZhbHVlCg==
+  prod: cHJvZCB2YWx1ZQo=
+secret3:
+- dmFsMQo=
+- dmFsMgo=

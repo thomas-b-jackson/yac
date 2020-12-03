@@ -1,0 +1,265 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "IntegrationTests",
+  "description": "yac-based integration tests",
+
+  "definitions": {
+    "test": {  
+      "title": "Integration Test",
+      "description": "A yac-based integration test. Each test requires either an artillery stanza, or a custom driver",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "name", "target" ],  
+      "oneOf" : [{"required" : ["artillery"]}, 
+                 {"required" : ["driver"]}],  
+      "properties": {
+        "name": {
+          "$id": "/properties/name",
+          "type": "string",
+          "title": "The Name Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "read-google"
+          ]
+        },
+        "description": {
+          "$id": "/properties/description",
+          "type": "array",
+          "items": {
+            "$id": "/properties/tests/items/properties/description/items",
+            "type": "string",
+            "title": "The 0 Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "assert against aggregated latency stats"
+            ]
+          }
+        },
+        "target": {
+          "$id": "/properties/target",
+          "type": ["string","object"],
+          "title": "Test Target",
+          "description": "The URL of the site under test, or the key into the target-map.",
+          "default": "",
+          "examples": [
+            "https://www.google.com/",
+            "my-site-map-key",
+            {"yac-calc":"lib/calc_target.py"}
+          ]
+        },   
+        "setup": {
+          "$id": "/properties/setup",
+          "type": "string",
+          "title": "The Setup Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "optional"
+          ]
+        },
+        "cleanup": {
+          "$id": "/properties/cleanup",
+          "type": "string",
+          "title": "The Cleanup Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "optional"
+          ]
+        },
+        "driver": {
+          "$id": "/properties/driver",
+          "type": "string",
+          "title": "The Driver Schema",
+          "description": "A customer test driver written in python.",
+          "default": "",
+          "examples": [
+            "my_test"
+          ]
+        },    
+        "artillery": {
+          "$id": "/properties/artillery",
+          "type": "object",
+          "properties": {
+            "config": {
+              "$id": "/properties/tests/items/properties/artillery/properties/config",
+              "type": "string",
+              "title": "The Config Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "yac/tests/test_vectors/artillery/read_google.json"
+              ]
+            },
+            "assertions": {
+              "$id": "/properties/artillery/properties/assertions",
+              "type": "object",
+              "properties": {
+                "p95_sec": {
+                  "$id": "/properties/tests/items/properties/artillery/properties/assertions/properties/p95_sec",
+                  "type": "string",
+                  "title": "The P95_sec Schema",
+                  "description": "The p95 latency threshold, in seconds.",
+                  "default": "",
+                  "examples": [
+                    "10"
+                  ]
+                },
+                "median_sec": {
+                  "$id": "/properties/artillery/properties/assertions/properties/median_sec",
+                  "type": "string",
+                  "title": "The Median_sec Schema",
+                  "description": "The median latency threshold, in seconds.",
+                  "default": "",
+                  "examples": [
+                    "7"
+                  ]
+                },
+                "error_count": {
+                  "$id": "/properties/artillery/properties/assertions/properties/error_count",
+                  "type": "string",
+                  "title": "The Error_count Schema",
+                  "description": "The number of errors encountered in a test run",
+                  "default": "",
+                  "examples": [
+                    "0"
+                  ]
+                },
+                "status": {
+                  "$id": "/properties/artillery/properties/assertions/properties/status",
+                  "type": "array",
+                  "items": {
+                    "$id": "/properties/tests/items/properties/artillery/properties/assertions/properties/status/items",
+                    "type": "string",
+                    "title": "The 0 Schema",
+                    "description": "The HTTP status code returned from the target.",
+                    "default": 0,
+                    "examples": [
+                      "200","300"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "anyOf" : [{"required" : ["tests"]}, 
+             {"required" : ["test-groups"]}],  
+  "properties": {
+    "target-map": {
+      "$id": "/properties/target-map",
+      "type": "object",
+      "description": "A map containing URLs of of testable site."
+    },    
+    "results-store": {
+      "$id": "/properties/results-store",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$id": "/properties/results-store/properties/type",
+          "type": "string",
+          "title": "The Type Schema",
+          "description": "The type of result store.",
+          "default": "",
+          "examples": [
+            "s3", "dir"
+          ]
+        },
+        "path": {
+          "$id": "/properties/results-store/properties/path",
+          "type": "string",
+          "title": "The Path Schema",
+          "description": "The path defining where results should be stored.",
+          "default": "",
+          "examples": [
+            ""
+          ]
+        }
+      }
+    },
+    "tests": {
+      "$id": "/properties/tests",
+      "type": "array",
+      "items": {"$ref": "#/definitions/test"}
+    },
+    "test-groups": {
+      "$id": "/properties/test-groups",
+      "type": "array",
+      "items": {
+        "$id": "/properties/test-groups/items",
+        "type": "object",
+        "required": [ "name", "tests", "target" ],
+        "properties": {
+          "name": {
+            "$id": "/properties/test-groups/items/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "my-group"
+            ]
+          },
+          "description": {
+            "$id": "/properties/test-groups/items/properties/description",
+            "type": "array",
+            "items": {
+              "$id": "/properties/test-groups/items/properties/description/items",
+              "type": "string",
+              "title": "The 0 Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "read google twice"
+              ]
+            }
+          },
+          "target": {
+            "$id": "/properties/target",
+            "type": ["string","object"],
+            "title": "Test Target",
+            "description": "The URL of the site under test, or the key into the target-map.",
+            "default": "",
+            "examples": [
+              "https://www.google.com/",
+              "my-site-map-key",
+              {"yac-calc":"lib/calc_target.py"}
+            ]
+          },
+          "setup": {
+            "$id": "/properties/test-groups/items/properties/setup",
+            "type": "string",
+            "title": "The Setup Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "optional"
+            ]
+          },
+          "cleanup": {
+            "$id": "/properties/test-groups/items/properties/cleanup",
+            "type": "string",
+            "title": "The Cleanup Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "optional"
+            ]
+          },
+          "tests": {
+            "$id": "/properties/test-groups/items/properties/tests",
+            "type": "array",
+            "items": {"$ref": "#/definitions/test"}
+          }
+        }
+      }
+    }
+  }
+}

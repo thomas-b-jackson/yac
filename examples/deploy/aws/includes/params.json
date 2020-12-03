@@ -1,0 +1,36 @@
+{
+  "Params": {
+    "availability-zones": {
+      "comment": "the availability zones to build into",
+      "value": [ "us-west-2a", "us-west-2b", "us-west-2c" ]
+    },
+    "naming-convention": {
+      "comment": "name resources by concatenating the service alias with the env",
+      "value": {
+          "param-keys": ["service-alias","env"],
+          "delimiter": "-"
+      }
+    },
+    "ami-id": {
+      "comment": ["The AMI ID of the hardened CIS ubuntu image"],
+      "value": "ami-fcc2a49c"
+    },
+    "domain-cidr": {
+      "comment": ["CIDR representing the Nordstrom domain"],
+      "value": "10.0.0.0/8"
+    },
+    "instance-type":  {
+      "comment": ["The instance type for  ec2 hosts"],
+      "lookup": "env",
+      "value": {
+        "dev":   "t2.small",
+        "stage": "t2.small",
+        "prod":  "t2.small"
+      }
+    },
+    "cluster-scale": {
+      "comment": "desired scale of asg",
+      "value": 2
+    }
+  }
+}

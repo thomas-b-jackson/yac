@@ -1,0 +1,210 @@
+Stack:
+  type: aws-cloudformation
+  Resources:
+    RunnerIAMRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: {"Fn::Join" : [ "/", [ "",
+                      {"yac-join" : [ "/", [
+                        {"yac-ref": "service-alias"},
+                        {"yac-ref": "env"}]]
+                      }, ""] ] }
+        AssumeRolePolicyDocument:
+          Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+        Policies:
+        - PolicyName: BuilderAccess
+          PolicyDocument:
+            Statement:
+            - Sid: ""
+              Effect: Allow
+              Action:
+              - s3:*
+              - elasticfilesystem:*
+              - es:*
+              - rds:*
+              - cloudformation:*
+              - elasticloadbalancing:*
+              - autoscaling:*
+              Resource: "*"
+    RunnersASG:
+      Type: AWS::AutoScaling::AutoScalingGroup
+      UpdatePolicy:
+        AutoScalingRollingUpdate:
+          MaxBatchSize: 1
+          MinInstancesInService: 1
+          MinSuccessfulInstancesPercent: '100'
+          PauseTime: PT1M
+          SuspendProcesses:
+          - AlarmNotification
+          WaitOnResourceSignals: 'false'
+      Properties:
+        AvailabilityZones:
+          yac-ref: availability-zones
+        DesiredCapacity:
+          yac-ref: cluster-scale
+        MaxSize: 2
+        MinSize: 1
+        HealthCheckGracePeriod: '600'
+        HealthCheckType: EC2
+        LaunchConfigurationName:
+          Ref: RunnersLaunchConfig
+        VPCZoneIdentifier:
+          yac-calc:
+          - subnet-ids
+          - internal
+          - yac-ref: availability-zones
+        Tags:
+        - Key: Name
+          Value:
+            yac-name: asg
+          PropagateAtLaunch: true
+        - Key: Owner
+          Value:
+            yac-ref: owner
+          PropagateAtLaunch: true
+        - Key: scheduler-asg-desiredminmax
+          Value: opt-out
+          PropagateAtLaunch: true
+    RunnersLaunchConfig:
+      Type: AWS::AutoScaling::LaunchConfiguration
+      Properties:
+        KeyName:
+          yac-ref: ssh-key-pair
+        SecurityGroups:
+        - Fn::GetAtt:
+          - RunnersSG
+          - GroupId
+        ImageId:
+          yac-calc:
+          - lib/calc_runner_ami_id.py
+        InstanceType:
+          yac-ref: instance-type
+        IamInstanceProfile:
+          Ref: RunnerIAMRole
+        AssociatePublicIpAddress: false
+        UserData:
+          Fn::Base64:
+            Fn::Join:
+            - ''
+            - yac-calc: ["ec2-boot","config/runner_boot.sh"]
+    RunnersSG:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: Security group for runner ec2 instances
+        SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp:
+            yac-ref: domain-cidr
+        VpcId:
+          yac-calc:
+          - vpc-id
+        Tags:
+        - Key: Name
+          Value:
+            yac-name: sg
+        - Key: Owner
+          Value:
+            yac-ref: owner
+InputsCache:
+  enabled: true
+  exclusions:
+  - env
+Inputs:
+- key: env
+  title: Environment
+  help: The environment to build runner for
+  type: string
+  required: true
+  options:
+  - dev
+  - stage
+  - prod
+- key: gitlab-url
+  title: GitLab URL
+  help: The URL of the GitLab host (e.g. https://gitlab.nordstrom.com)
+  type: string
+  required: true
+- key: registration-token
+  title: Runner Registration Token
+  help: A runner registration token
+  type: string
+  required: true
+- key: ssh-key-pair
+  title: SSH Key Pair
+  help: The name of the SSH key pair to associate with the EC2 instance. Make sure
+    it is only known to you!!
+  type: string
+  required: true
+- key: gitlab-version
+  title: GitLab Version
+  help: Enter the version of GitLab
+  type: string
+  required: true
+Params:
+  boot-file:
+    comment: the file that the ec2 instances hosting gitlab should use to boot from
+    value: config/runner_boot.sh
+  availability-zones:
+    comment: the availability zones to build into
+    value:
+    - us-west-2a
+    - us-west-2b
+    - us-west-2c
+  cluster-scale:
+    comment: number of ec2 hosts in runner asg
+    value: 1
+  owner:
+    comment: used to tag the owner of all printed resources
+    value: tech_dot_support@nordstrom.com
+  cis-hardened-ubuntu-ami:
+    comment:
+    - The AMI ID of the hardened CIS ubuntu image that serves as the
+    - base image for our Runner AMI builds.
+    value: ami-fcc2a49c
+  domain-cidr:
+    comment: CIDR definining clients in the nordstrom domain
+    value: 10.0.0.0/8
+  instance-type:
+    comment: The instance type to use for the EC2 host
+    value: t2.small
+  naming-convention:
+    comment: name resouces with a combination of the alias and the env, separated
+      by a dash
+    value:
+      param-keys:
+      - service-alias
+      - env
+      delimiter: "-"
+Artifacts:
+- name: gitlab-runner
+  type: ami
+  packer-file: packer/runner.json
+  Inputs:
+  - key: gitlab-version
+    title: GitLab Version
+    help: Enter the version of GitLab
+    type: string
+    required: true
+Credentialers:
+- type: nordstrom-aws
+  # the name attribute is the "key" for this credentialer, and is thus the 3rd arg you
+  # supply to the yac creds command
+  name: aws
+  accounts:
+  - profile: aws
+    name:
+      yac-ref: aws-account-name
+    default: true
+  Inputs:
+  - key: aws-account-name
+    title: AWS Account Name
+    help: The name of the AWS account to build to (e.g. NORD-NonProd_DOTS-DevUsers-Team)
+    type: string
+    required: true

@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Base64 Vault",
+  "description": "b64 vault configs",
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "comment": {
+      "type": ["string","array"],
+      "title": "Vault Comment",
+      "description": "An explanation of the vault.",
+      "examples": [
+        "vault is in a local file"
+      ]
+    },
+    "vault-path": {
+      "type": "string",
+      "title": "Vault Path",
+      "description": "The path to the vault.",
+      "default": "",
+      "examples": [
+        "/var/local/my_vault.kbx"
+      ]
+    },
+    "vault-pwd": {
+      "type": ["string","object"],
+      "title": "Vault Password",
+      "description": "The password to the vault.",
+      "default": "",
+      "examples": [
+        "open_sesame", {"yac-ref": "vault-pwd"}
+      ]
+    }
+  }
+}

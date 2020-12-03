@@ -1,0 +1,46 @@
+{
+  "Type": "AWS::IAM::Role",
+  "Properties": {
+    "Path": {"Fn::Join" : [ "/", [ "",
+                {"yac-join" : [ "/", [
+                  {"yac-ref": "service-alias"},
+                  {"yac-ref": "env"}]]
+                }, ""] ] },
+    "AssumeRolePolicyDocument": {
+      "Statement": [
+        {
+          "Sid": "",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "ec2.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    },
+    "Policies": [{
+      "PolicyName": "AlertsAccess",
+      "PolicyDocument": {
+        "Statement": [
+          {
+            "Resource": "*",
+            "Action": [
+              "logs:*"
+            ],
+            "Effect": "Allow"
+          },
+          {
+            "Resource": "*",
+            "Action": [
+              "cloudwatch:ListMetrics",
+              "cloudwatch:GetMetricStatistics",
+              "cloudwatch:PutMetricData",
+              "autoscaling:DescribeAutoScalingInstances"
+            ],
+            "Effect": "Allow"
+          }
+        ]
+      }
+    }]
+  }
+}

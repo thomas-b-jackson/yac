@@ -1,0 +1,245 @@
+Description:
+  name: nordstromdot/container-builder
+  default-alias: container-builder
+  summary: Builds and poshes OCI container images
+  details:
+  - HA via ASG
+  - Builds and pushes to images
+  maintainer:
+    name: DevOps Tools
+    email: tech_dot_support@nordstrom.com
+  repo: https://gitlab.nordstrom.com/DOTS/yac
+  tags:
+  - docker
+  - build
+  version: '1.0'
+Stack:
+  type: aws-cloudformation
+  Resources:
+    RunnersASG:
+      Type: AWS::AutoScaling::AutoScalingGroup
+      Properties:
+        AvailabilityZones:
+          yac-ref: availability-zones
+        DesiredCapacity:
+          yac-ref: cluster-scale
+        MaxSize: 1
+        MinSize: 1
+        HealthCheckGracePeriod: '600'
+        HealthCheckType: EC2
+        LoadBalancerNames:
+        - Ref: BuilderElb
+        LaunchConfigurationName:
+          Ref: BuilderLaunchConfig
+        VPCZoneIdentifier:
+          yac-calc:
+          - subnet-ids
+          - internal
+          - yac-ref: availability-zones
+        Tags:
+        - Key: Name
+          Value:
+            yac-name: asg
+          PropagateAtLaunch: true
+        - Key: Owner
+          Value:
+            yac-ref: owner
+          PropagateAtLaunch: true
+        - Key: scheduler-asg-desiredminmax
+          Value: opt-out
+          PropagateAtLaunch: true
+    BuilderLaunchConfig:
+      Type: AWS::AutoScaling::LaunchConfiguration
+      Properties:
+        KeyName: dots-builder
+        SecurityGroups:
+        - Fn::GetAtt:
+          - BuilderSG
+          - GroupId
+        ImageId:
+          yac-calc: ["lib/calc_builder_ami_id.py"]
+        InstanceType:
+          yac-ref: instance-type
+        AssociatePublicIpAddress: false
+        UserData:
+          Fn::Base64:
+            Fn::Join:
+            - ''
+            - yac-calc: ["ec2-boot","config/builder_boot.sh"]
+    BuilderSG:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: Security group for runner ec2 instances
+        SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp:
+            yac-ref: domain-cidr
+        - IpProtocol: tcp
+          FromPort: '5555'
+          ToPort: '5555'
+          CidrIp:
+            yac-ref: domain-cidr
+        - IpProtocol: tcp
+          FromPort: '5555'
+          ToPort: '5555'
+          SourceSecurityGroupId:
+            Ref: BuilderElbSG
+        VpcId:
+          yac-calc:
+          - vpc-id
+        Tags:
+        - Key: Name
+          Value:
+            yac-name: sg
+        - Key: Owner
+          Value:
+            yac-ref: owner
+    BuilderElb:
+      Type: AWS::ElasticLoadBalancing::LoadBalancer
+      Properties:
+        SecurityGroups:
+        - Fn::GetAtt:
+          - BuilderElbSG
+          - GroupId
+        LoadBalancerName:
+          yac-name: elb
+        Listeners:
+        - LoadBalancerPort: 80
+          InstancePort: 5555
+          InstanceProtocol: HTTP
+          Protocol: HTTP
+        HealthCheck:
+          Target: TCP:5555
+          HealthyThreshold: '3'
+          UnhealthyThreshold: '5'
+          Interval: '20'
+          Timeout: '5'
+        Scheme: internet-facing
+        Subnets:
+          yac-calc:
+          - subnet-ids
+          - dmz
+          - yac-ref: availability-zones
+        Tags:
+        - Key: Name
+          Value:
+            yac-name: elb
+        - Key: Owner
+          Value:
+            yac-ref: owner
+        - Key: App
+          Value:
+            yac-ref: service-alias
+    BuilderElbSG:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: Enable inbound HTTP access for docker registry clients from
+          within nordstrom domain
+        SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 161.181.156.34/32
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 161.181.156.35/32
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 161.181.253.20/32
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 161.181.253.34/32
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 161.181.253.35/32
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 161.181.53.34/32
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 161.181.53.35/32
+        VpcId:
+          yac-calc:
+          - vpc-id
+        Tags:
+        - Key: Name
+          Value:
+            yac-name: elb-sg
+        - Key: Owner
+          Value:
+            yac-ref: owner
+Inputs:
+- key: env
+  title: Environment
+  help: The environment to build runner for
+  type: string
+  required: true
+  options:
+  - dev
+  - prod
+Params:
+  boot-file:
+    comment: the file that the ec2 instances hosting gitlab should use to boot from
+    value: config/builder_boot.sh
+  availability-zones:
+    comment: the availability zones to build into
+    value:
+    - us-west-2a
+    - us-west-2b
+    - us-west-2c
+  cluster-scale:
+    comment: number of ec2 hosts in runner asg
+    value: 1
+  owner:
+    comment: used to tag the owner of all printed resources
+    value: tech_dot_support@nordstrom.com
+  cis-hardened-ubuntu-ami:
+    comment:
+    - The AMI ID of the hardened CIS ubuntu image that serves as the
+    - base image for our Builder AMI.
+    value: ami-fcc2a49c
+  domain-cidr:
+    comment: CIDR definining clients in the nordstrom domain
+    value: 10.0.0.0/8
+  instance-type:
+    comment: The instance type to use for the EC2 host
+    value: t2.small
+  naming-convention:
+    comment: name resouces with a combination of the alias and the env, separated
+      by a dash
+    value:
+      param-keys:
+      - service-alias
+      delimiter: "-"
+  ami-name:
+    comment: the name of ami
+    value: builder-1.0
+Artifacts:
+- name: ami
+  type: ami
+  description: ami for a yac-based container builder
+  packer-file: packer/builder.json
+Credentialers:
+- type: nordstrom-aws
+  # the name attribute is the "key" for this credentialer, and is thus the 3rd arg you
+  # supply to the yac creds command
+  name: aws
+  accounts:
+  - profile: aws
+    name:
+      yac-ref: aws-account-name
+    default: true
+  Inputs:
+  - key: aws-account-name
+    title: AWS Account Name
+    help: The name of the AWS account to build to (e.g. NORD-NonProd_DOTS-DevUsers-Team)
+    type: string
+    required: true

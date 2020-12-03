@@ -1,0 +1,30 @@
+{
+  "Description": {
+    "name": "nordstrom/jira",
+    "default-alias": "jira",
+    "summary": "Just your basic simple service. Doesn't do much.",
+    "details":  ["* Looks nice"],
+    "maintainer" : {
+      "name":     "Nordstrom DOTS",
+      "email":    "dots@nordstrom.com"
+    },
+    "repo": "https://gitlab.nordstrom.com/DOTS/jira"
+  },
+  "Stack": {
+    "type": "aws-cloudformation",
+    "Resources": {
+      "task-defintion": {
+        "containers": [
+          {
+            "name": "jira",
+            "image": "dot/jira:7.4"
+          },
+          {
+            "name": "confluence",
+            "image": "dot/confluence:11.0"
+          }
+        ]
+      }
+    }
+  }
+}

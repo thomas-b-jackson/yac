@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Providers",
+  "description": "cloud service providers",
+  "type": "object",
+  "properties": {
+    "stacks": {
+      "type": "array",
+      "title": "stack providers",
+      "description": "Provider for building infrastructure stacks",
+      "items": {"$ref": "#/definitions/provider"}
+    },
+    "credentialers": {
+      "type": "array",
+      "title": "credentialer providers",
+      "description": "Provider for creating provider credentials",
+      "items": {"$ref": "#/definitions/provider"}
+    }
+  },
+  "definitions": {
+    "provider": {
+      "title": "Cloud Service Provider",
+      "description": "Provides a specific service made available via yac",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "module", "class" ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "title": "Provider Key",
+          "description": "The provider key",
+          "examples": [
+            "aws-cloudformation"
+          ]
+        },
+        "module": {
+          "type": "string",
+          "title": "Provider Module",
+          "description": "The path to the python file containing the module",
+          "examples": [
+            "yac/lib/stacks/aws/stack.py"
+          ]
+        },
+        "class": {
+          "type": "string",
+          "title": "Class Value",
+          "description": "The name of the class providing the stack service",
+          "examples": [
+            "AWSStack", "K8sStack"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "Type" : "AWS::AutoScaling::AutoScalingGroup",
+  "UpdatePolicy" : {
+    "AutoScalingRollingUpdate" : {
+      "MaxBatchSize" : "1",
+      "MinInstancesInService" : {"yac-ref": "cluster-scale"},
+      "MinSuccessfulInstancesPercent" : "100",
+      "PauseTime" : "PT5M",
+      "SuspendProcesses" : ["AlarmNotification"],
+      "WaitOnResourceSignals" : "false"
+    }
+  },
+  "Properties" : {
+    "AvailabilityZones": { "yac-ref" : "availability-zones" },
+    "DesiredCapacity" : {"yac-ref": "cluster-scale"},
+    "MaxSize": 3,
+    "MinSize": 1,
+    "HealthCheckGracePeriod": "600",
+    "HealthCheckType": "EC2",
+    "LaunchConfigurationName": { "Ref" : "MyAppLaunchConfig" },
+    "VPCZoneIdentifier": {"yac-calc": ["subnet-ids",
+                                       "internal",
+                                       {"yac-ref": "availability-zones"}]},
+    "Tags" : [
+      { "Key": "Name", "Value" : { "yac-name" : "asg" },"PropagateAtLaunch": true }
+    ]
+  }
+}

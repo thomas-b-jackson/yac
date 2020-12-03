@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "File Vault",
+  "description": "schema for file vault (i.e. a file containing secrets)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "comment": {
+      "type": ["string","array"],
+      "title": "Vault Comment",
+      "description": "An explanation of the vault.",
+      "examples": [
+        "vault is in a local file"
+      ]
+    },
+    "vault-path": {
+      "$id": "/properties/vault-path",
+      "type": "string",
+      "description": "full path to the vault file"
+    },
+    "format": {
+      "$id": "/properties/format",
+      "type": "string",
+      "enum": ["json", "yaml"],
+      "description": "vault format",
+      "examples": ["json", "yaml"]
+    }
+  }
+}

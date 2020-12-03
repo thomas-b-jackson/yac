@@ -1,0 +1,125 @@
+Description:
+  name: nordstromdot/yac-registry
+  default-alias: yac-registry
+  summary: A Redis instance serving as yac's registry
+  maintainer:
+    name: DevOpts Tools
+    email: tech_dot_support@nordstrom.com
+  repo: https://gitlab.nordstrom.com/DOTS/yac
+  tags:
+  - yac
+  - registry
+  version: '1.0'
+Stack:
+  type: aws-cloudformation
+  Resources:
+    RedisCacheCluster:
+      Type: AWS::ElastiCache::CacheCluster
+      Properties:
+        CacheSubnetGroupName:
+          Ref: RedisCacheSubnetGroup
+        CacheNodeType:
+          yac-ref: cache-instance-type
+        VpcSecurityGroupIds:
+        - Ref: RedisCacheSecurityGroup
+        Engine: redis
+        NumCacheNodes:
+          yac-ref: cache-node-count
+        ClusterName:
+          yac-name: ec
+        Tags:
+        - Key: Name
+          Value:
+            yac-name: ec
+        - Key: Owner
+          Value:
+            yac-ref: owner
+        - Key: App
+          Value:
+            yac-ref: service-alias
+    RedisCacheSecurityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: Allow access to the cache from the Web Server
+        VpcId:
+          yac-calc:
+          - vpc-id
+        SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort:
+            yac-ref: redis-port
+          ToPort:
+            yac-ref: redis-port
+          CidrIp:
+            yac-calc:
+            - vpc-cidr
+        - IpProtocol: tcp
+          FromPort:
+            yac-ref: redis-port
+          ToPort:
+            yac-ref: redis-port
+          CidrIp:
+            yac-ref: domain-cidr
+        Tags:
+        - Key: Name
+          Value:
+            yac-name: redis-sg
+        - Key: Owner
+          Value:
+            yac-ref: owner
+        - Key: App
+          Value:
+            yac-ref: service-alias
+    RedisCacheParameters:
+      Type: AWS::ElastiCache::ParameterGroup
+      Properties:
+        CacheParameterGroupFamily: redis3.2
+        Description: Parameter group
+        Properties: {}
+    RedisCacheSubnetGroup:
+      Type: AWS::ElastiCache::SubnetGroup
+      Properties:
+        Description: Subnets available for the ElastiCache Cluster
+        SubnetIds:
+          yac-calc:
+          - subnet-ids
+          - internal
+          - yac-ref: availability-zones
+Params:
+  cache-node-count:
+    comment: redis only supports a single node
+    value: 1
+  cache-instance-type:
+    comment: The instance type of the redis cache node
+    value: cache.m1.small
+  redis-port:
+    comment: the port that Redis should listen on
+    value: '6379'
+  domain-cidr:
+    comment: the cidr for the nordstrom domain
+    value: 10.0.0.0/8
+  owner:
+    comment: Our distro list, used for resource tagging
+    value: tech_dot_support@nordstrom.com
+  availability-zones:
+    comment: supported az's
+    value:
+    - us-west-2a
+    - us-west-2b
+    - us-west-2c
+Credentialers:
+- type: nordstrom-aws
+  # the name attribute is the "key" for this credentialer, and is thus the 3rd arg you
+  # supply to the yac creds command
+  name: aws
+  accounts:
+  - profile: aws
+    name:
+      yac-ref: aws-account-name
+    default: true
+  Inputs:
+  - key: aws-account-name
+    title: AWS Account Name
+    help: The name of the AWS account to build to (e.g. NORD-NonProd_DOTS-DevUsers-Team)
+    type: string
+    required: true

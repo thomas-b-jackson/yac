@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Naming Convention",
+  "description": "Specifies convention for naming service resourcs",
+
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "param-keys": {
+      "type": "array",
+      "title": "Param Keys",
+      "description": "A array of param keys to use in name creation, rendered first to last",
+      "default": "",
+      "examples": [
+        ["prefix","service-alias","env"], ["service-alias"]
+      ]
+    },
+    "delimitter": {
+      "$id": "http://example.com/example.json/items/properties/type",
+      "type": "string",
+      "title": "Delimitter (deprecated)",
+      "description": "The delimitter to put between the name parts when rendering a name",
+      "default": "-",
+      "examples": [
+        "-",".","_"
+      ]
+    },
+    "delimiter": {
+      "$id": "http://example.com/example.json/items/properties/type",
+      "type": "string",
+      "title": "Delimiter",
+      "description": "The delimiter to put between the name parts when rendering a name",
+      "default": "-",
+      "examples": [
+        "-",".","_"
+      ]
+    }    
+  }
+}

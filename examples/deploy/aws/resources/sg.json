@@ -1,0 +1,22 @@
+{
+  "Type" : "AWS::EC2::SecurityGroup",
+  "Properties" : {
+    "GroupDescription" : "Security group for ec2 instances",
+    "SecurityGroupIngress" : [
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : "443",
+          "ToPort" : "443",
+          "CidrIp" : {"yac-ref": "domain-cidr"}
+        },
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : {"yac-ref": "domain-cidr"}
+        }
+     ],
+    "VpcId": {"yac-calc": ["vpc-id"]},
+    "Tags" : [ {"Key": "Name", "Value" : { "yac-name" : "sg" } }]
+  }
+}

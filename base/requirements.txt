@@ -1,0 +1,13 @@
+kubernetes==9.0.0a1
+boto3==1.9.83
+boto==2.49.0
+redis==3.0.1
+fakeredis==0.16.0
+pg8000==1.12.4
+colorama==0.4.1
+requests==2.21.0
+jsonschema==2.6.0
+pykeepass==3.0.2
+slackclient==1.3.0
+docker==3.5.1
+SQLAlchemy==1.3.0b1

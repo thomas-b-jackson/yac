@@ -1,0 +1,19 @@
+{
+  "Inputs": [
+    {
+      "key": "env",
+      "title": "Environment",
+      "help":  "The environment to build",
+      "type": "string",
+      "required": true,
+      "options": ["dev","stage"]
+    },
+    {
+      "key": "ssh-key",
+      "title": "SSH Key",
+      "help":  "The ssh key to use with the ec2 instance (user is 'ubuntu')",
+      "type": "string",
+      "required": true
+    }
+  ]
+}

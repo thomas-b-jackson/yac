@@ -1,0 +1,45 @@
+Description:
+  name: yac/k8s-example
+  default-alias: k8s-example
+  summary: Builds Nginx to arbitrary Nordstrom k8s namespace in two clusters
+  details:
+  - Deploys nginx via a psp-compliant k8s deployment in two clusters (nonprod and prod)
+  - Requires that you know the name of a k8s namespace you have
+  -  write access to
+  #
+  - First export this service to a local directory as
+  - $ yac grok -v examples/deploy/k8s/service.yaml -x
+  - Next create a suitable k8s credentials file as
+  - $ yac creds <path>/service.yaml me
+  - Next do a dry run deploy
+  - $ yac deploy $SF -d
+  - Finally deploy for reals
+  - $ yac deploy $SF -d
+Pipeline:
+  stages:
+  - name: dev
+    kvps: env:dev
+    build-context: nonprod
+  - name: prod
+    kvps: env:prod
+    build-context: prod1
+#
+includes:
+  inputs:
+    comment: Inputs associated with this service
+    value: includes/inputs.json
+  params:
+    comment: Constants associated with this service
+    value: includes/params.json
+  credentialers:
+    comment: Credentialers associated with this service
+    value: "includes/creds.yaml"
+  stack:
+    comment: K8s resources for this service
+    value: includes/stack.yaml
+  images:
+    comment: container images for this service
+    value: includes/images.yaml
+  secrets:
+    comment: vaults associated with this service
+    value: includes/vaults.yaml

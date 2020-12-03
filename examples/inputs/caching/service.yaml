@@ -1,0 +1,32 @@
+Description:
+  name: yac/inputs-caching
+  default-alias: inputs-caching
+  summary: Demonstrates inputs caching via a yac task
+  details:
+  - Inputs can be cached to a file.
+  - Each inputs must satisfy the schema at yac/schema/input.json
+  - try it out using
+  -   $ yac params examples/inputs/caching/service.yaml
+  - Try exporting service and experiment with input conditionals
+InputsCache:
+  enabled: true
+  exclusions: ['env']
+Inputs:
+- key: env
+  title: Environment
+  help: The environment to build
+  type: string
+  required: true
+  options:
+  - dev
+  - prod
+- key: color
+  title: Color
+  help: You hair color
+  type: string
+  required: true
+  options:
+  - black
+  - red
+  - brown
+  - other

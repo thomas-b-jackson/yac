@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Pipeline",
+  "description": "yac pipeline",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "stages": {
+      "type": "array",
+      "description": "an array os pipeline stage objects",
+      "items": {"$ref": "#/definitions/stage"}
+    },
+    "notifications": {
+      "title": "Notifications",
+      "type": "object",
+      "description": "pipeline notifications",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Notifier Type",
+          "description": "The type of pipeline notifier",
+          "enum": ["slack"],
+          "examples": ["slack"]
+        },
+        "configs": {
+          "type": "object",
+          "title": "Notifier Configs",
+          "description": "Configs for the notifier type selected",
+          "examples": [
+            {
+              "info-channel": "myteam-pipeline",
+              "warning-channel": "myteam-pipeline",
+              "api-key": {"yac-ref": "slack-api-key"}
+            }
+          ]
+        }
+      }
+    }
+  },
+  "definitions": {
+    "stage": {
+      "title": "Pipeline Stage",
+      "description": "pipeline stage",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Stage Name",
+          "description": "the name of this stage (used with --stage arg to yac deploy command)",
+          "default": "",
+          "examples": ["dev"]
+        },
+        "creds": {
+          "type": "array",
+          "title": "Credentialer Keys",
+          "description": "the keys of the credentialers that should be run at this stage. each are defined via the Credentialers stanza.",
+          "items": {
+            "type": "string"
+          },
+          "examples": ["k8s"]
+        },
+        "kvps": {
+          "type": "string",
+          "title": "Key-Value Pairs",
+          "description": "key/value pairs defining params to set at this stage",
+          "examples": ["env:dev,this:that"]
+        },
+        "build-context": {
+          "type": "string",
+          "title": "Build Context",
+          "description": "The build context at this stage. Equates to a 'cluster context' in a k8s build and a 'profile' in an aws build. Build contexts are defined via the Credentialers stanza.",
+          "examples": ["nonprod"]
+        },
+        "tasks": {
+          "type": "array",
+          "title": "Task Names",
+          "description": "the names of tasks that should be run at this stage. each are defined via the Tasks stanza.",
+          "items": {
+            "type": "string"
+          },
+          "examples": ["setup"]
+        },
+        "tests": {
+          "type": "array",
+          "title": "Test Names",
+          "description": "the names of tests that should be run at this stage. each are defined via the IntegrationTests stanza.",
+          "items": {
+            "type": "string"
+          },
+          "examples": ["read-commits"]
+        },
+        "test-groups": {
+          "type": "array",
+          "title": "Test Group Names",
+          "description": "the names of test groups that should be run at this stage. each are defined via the IntegrationTests stanza.",
+          "items": {
+            "type": "string"
+          },
+          "examples": ["commits"]
+        }
+      }
+    }
+  }
+}

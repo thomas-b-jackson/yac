@@ -1,0 +1,26 @@
+Description:
+  name: yac/simple-artillery-demo
+  default-alias: simple-artillery-demo
+  summary: Demo of a simple artillery-based integration test orchestrated through
+    yac
+  details:
+  - Test details are per IntegrationTests.tests[0].description field below
+  - IntegrationTests must satisfy the schema at yac/schema/integration_tests.json
+  - try it out using
+  -  $ yac test examples/test/artillery/simple/service.yaml
+IntegrationTests:
+  tests:
+  - name: read-google
+    description:
+    - loads the google search page and asserts based on latency and status codes
+    target: https://www.google.com/
+    artillery:
+      config: "./read_google.yaml"
+      assertions:
+        comment:
+        - assert against aggregated latency stats and status codes
+        p95_sec: '1'
+        median_sec: '1'
+        error_count: '0'
+        status:
+        - '200'

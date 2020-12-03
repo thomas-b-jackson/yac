@@ -1,0 +1,10 @@
+aliases:
+- alias: nonprod
+  server-url: https://kubelogin.platform-nonprod.r53.nordstrom.net
+  kubectl-user: nonprod_oidc
+- alias: prod1
+  server-url: https://kubelogin.platform.r53.nordstrom.net
+  kubectl-user: prod1_oidc
+- alias: prod2
+  server-url: https://kubelogin.platform.r53.nordstrom.net
+  kubectl-user: prod2_oidc

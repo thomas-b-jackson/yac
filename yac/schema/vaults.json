@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Vaults",
+  "description": "vaults containing service secrets",
+  "type": "array",
+  "definitions": {},
+  "items": {
+    "type": "object",
+    "title": "Vault",
+    "additionalProperties": false,
+    "properties": {
+      "type": {
+        "type": "string",
+        "title": "The vault type",
+        "description": "The type of vault represented by this source.",
+        "default": "",
+        "examples": [
+          "keepass"
+        ]
+      },
+      "name": {
+        "type": "string",
+        "title": "The vault name",
+        "description": "The name of the valut.",
+        "default": "",
+        "examples": [
+          "keepass"
+        ]
+      },
+      "configs": {
+        "type": "object",
+        "title": "Vault Access Configuration",
+        "description": "Configuration parameters for accessing the vault."
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Artifacts",
+  "description": "A list of artifacts to be make before deploying service",
+  "type": "array",
+  "definitions": {},
+
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "title": "Artifact Name",
+        "description": "The name of the artifact.",
+        "default": "",
+        "examples": [
+          "keepass"
+        ]
+      },
+      "type": {
+        "type": "string",
+        "title": "Artifact Type",
+        "description": "The type of artifact represented.",
+        "default": "container-image",
+        "examples": [
+          "ami","container-image"
+        ]
+      },
+      "description": {
+        "type": "string",
+        "title": "Artifact Description",
+        "description": "The description for what the artifact does for the service.",
+        "default": "",
+        "examples": [
+          "Image for artifactory container", "AMI for gitlab"
+        ]
+      }
+    }
+  }
+}

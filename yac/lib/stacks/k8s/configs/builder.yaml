@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ServiceAccount
+# This gives the scheduler access to the token that provides read access
+#  to the gitlab registry. Scheduler needs this with it tries to pull
+#  the yac image down when the shared runner pod is launched
+imagePullSecrets:
+- name: shared-gitlab-account
+metadata:
+  name: {'yac-ref': 'builder-name'}
+---
+# Permissions that the builder account should be given
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {'yac-ref': 'builder-name'}
+rules: {'yac-ref': 'builder-rules'}
+---
+# Bind the builder SA to the permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {'yac-ref': 'builder-name'}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {'yac-ref': 'builder-name'}
+subjects:
+  - kind: ServiceAccount
+    name: {'yac-ref': 'builder-name'}

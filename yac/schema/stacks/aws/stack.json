@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Stack",
+  "description": "AWS stack",
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "title": "The Stack Type",
+      "description": "For aws, type == 'aws-cloudformation'",
+      "examples": [
+        "aws-cloudformation"
+      ]
+    },
+    "Parameters": {
+      "type": "object",
+      "title": "Parameters",
+      "description": "Parameters needed for the stack, per cloud formation."
+    },
+    "Resources": {
+      "type": "object",
+      "title": "Resources",
+      "description": "Resources needed for the stack, per cloud formation."
+    },
+    "Conditions": {
+      "type": "object",
+      "title": "Conditions",
+      "description": "Conditions needed for the stack, per cloud formation."
+    },
+    "BootFiles": {
+      "type": "object",
+      "title": "BootFiles",
+      "description": "Files that should be copied to s3 as part of the stack build or update",
+      "additionalProperties": false,
+      "properties": {
+        "files": {
+          "type": "array",
+          "title": "files",
+          "description": "A list of files to be copied",
+          "items": {
+            "type": "object",
+            "title": "File",
+            "additionalProperties": false,
+            "properties": {
+              "src": {
+                "type": ["string","object"],
+                "title": "File Source",
+                "description": "The full relative path to the source file to be copied",
+                "default": "",
+                "examples": [
+                  "config/gitlab-1.rb",
+                  {"yac-ref": "gitlab-rb-file-path"}
+                ]
+              },
+              "dest": {
+                "type": ["string","object"],
+                "title": "File Destination",
+                "description": "The path to the location in s3 where the file should be copied",
+                "default": "",
+                "examples": [
+                  "s3://my-bucket-name/config/gitlab-1.rb",
+                  {"yac-join" : [ "/", [
+                     "s3:/",
+                    {"yac-ref": "s3-bucket-map"},
+                    {"yac-ref": "service-alias"},
+                    {"yac-ref": "env"},
+                     "gitlab-1.rb" ]]}
+                ]
+              }
+            }
+          }
+        },
+        "directories": {
+          "type": "array",
+          "title": "directories",
+          "description": "A list of directories to be copied",
+          "items": {
+            "type": "object",
+            "title": "Directory",
+            "additionalProperties": false,
+            "properties": {
+              "src": {
+                "type": ["string","object"],
+                "title": "Directory Source",
+                "description": "The full relative path to the source dir to be copied",
+                "default": "",
+                "examples": [
+                  "config/datadog",
+                  {"yac-ref": "datadog-configs-path"}
+                ]
+              },
+              "dest": {
+                "type": ["string","object"],
+                "title": "Directory Destination",
+                "description": "The path to the location in s3 where the directory should be recursively copied",
+                "default": "",
+                "examples": [
+                  "s3://my-bucket-name/config/datadog",
+                  {"yac-join" : [ "/", [
+                     "s3:/",
+                    {"yac-ref": "s3-bucket-map"},
+                    {"yac-ref": "service-alias"},
+                    {"yac-ref": "env"},
+                     "config/datadog" ]]}
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "ParameterMapping": {
+      "title": "ParameterMapping",
+      "type": "object",
+      "description": "maps cf parameters to yac params (rarely needed)",
+      "patternProperties": {
+        "(\\S)": {
+          "type": "object",
+          "title": "Parameter Key",
+          "description": "The key of the cloud formation parameter",
+          "additionalProperties": false,
+          "properties": {
+            "comment": {
+              "type": ["string","array"],
+              "title": "Mapping Comment",
+              "description": "An explanation of why the mapping is necessary.",
+              "default": "",
+              "examples": [
+                "RDS doesn't allow this to be updated on stack updates (thus the cf param is immutable)",
+                ["RDS doesn't allow this to be updated on stack updates",
+                 "thus the cf param is immutable)"]
+              ]
+            },
+            "value": {
+              "type": ["string","object"],
+              "title": "Parameter Value",
+              "description": "The yac param value the CF parameter should take",
+              "default": "",
+              "examples": [
+                {"yac-ref": "rds-master-pwd"}
+              ]
+            },
+            "immutable": {
+              "type": "boolean",
+              "title": "immutable?",
+              "description": "Whether the CF parameter is immutable",
+              "default": true,
+              "examples": [
+                true,false
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

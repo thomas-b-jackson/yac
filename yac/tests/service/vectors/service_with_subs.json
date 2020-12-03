@@ -1,0 +1,36 @@
+{
+  "Description": {
+    "name": "nordstrom/jira",
+    "default-alias": "gitlab-fe",  
+    "summary": "Just your basic simple service. Doesn't do much.",
+    "details":  ["* Looks nice"],
+    "maintainer" : {
+      "name":     "Thomas Jackson",
+      "email":    "thomas.b.jackson@gmail.com"
+    },
+    "repo": "https://gitlab.nordstrom.com/DOTS/gitlab"
+  },
+  "includes": {
+    "my-sub": {
+      "comment": "test sub",
+      "value": "subs/sub_service.json"
+    }
+  },
+  "Stack": {
+    "type": "aws-cloudformation",
+    "Resources": {
+      "task-definition-1": {
+        "containers": [
+          {
+            "name": "jira",
+            "image": "dot/jira:7.4"
+          },
+          {
+            "name": "confluence",
+            "image": "dot/confluence:11.0"
+          }
+        ]
+      }
+    }
+  }
+}

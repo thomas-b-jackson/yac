@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "S3 Vault",
+  "description": "schema for s3 vault (i.e. a file in s3 containing secrets)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "comment": {
+      "type": ["string","array"],
+      "title": "Vault Comment",
+      "description": "An explanation of the vault.",
+      "examples": ["vault is in a local file"]
+    },
+    "bucket": {
+      "type": "string",
+      "description": "name of the s3 bucket where secrets file lives",
+      "examples": [ "mybucket"]
+    },
+    "vault-path": {
+      "type": "string",
+      "description": "full path to the vault file",
+      "examples": [ "gitlab/gitlab-secrets.json"]
+    },
+    "format": {
+      "type": "string",
+      "enum": ["json", "yaml"],
+      "description": "vault format",
+      "examples": ["json", "yaml"]
+    }
+  }
+}

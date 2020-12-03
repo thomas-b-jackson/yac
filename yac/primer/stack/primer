@@ -1,0 +1,28 @@
+
+YAC - Your Automated Cloud v{VER}
+{COMMAND}
+
+Available comands include:
+
+  yac {COMMAND} (-h | primer)
+
+* -h provides cli help
+* primer will display this page
+
+Stack executes a service build in a given pipeline stage.
+
+Say the 'platformengineering/redis:4.6' service has three stages in its pipeline:
+
+* dev
+* test
+* prod
+
+Say you want to deploy the 'platformengineering/redis:4.6' service in the dev stage.
+
+Do a dry run build as:
+
+$ yac stack platformengineering/redis:4.6 -d
+
+If all goes well, build the service as:
+
+$ yac stack platformengineering/redis:4.6

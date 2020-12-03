@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Input",
+  "description": "Describes an individual yac input",
+
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "key": {
+      "type": "string",
+      "title": "Input Key",
+      "description": "The key for this input (once processing, it will become a param key)",
+      "default": "",
+      "examples": [
+        ["env","bucket-name"]
+      ]
+    },
+    "title": {
+      "type": "string",
+      "title": "Tile",
+      "description": "The input title",
+      "default": "",
+      "examples": ["Environment", "S3 Bucket Name"]
+    },
+    "help": {
+      "type": "string",
+      "title": "Help",
+      "description": "Help/Explanatory text displayed when user is prompted for the input",
+      "default": "",
+      "examples": [
+        "The environment where the service is to be built",
+        "The name of the s3 bucket where secrets should be saved"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "title": "Type",
+      "description": "Input data type",
+      "default": "",
+      "examples": [
+      ]
+    },
+    "required": {
+      "type": "boolean",
+      "title": "Required",
+      "description": "Is this input required? or optional",
+      "default": "",
+      "examples": [true,false]
+    },
+    "options": {
+      "type": "array",
+      "title": "Options",
+      "description": "Pickage options for an input",
+      "default": "",
+      "examples": [["dev","stage","prod"]]
+    },
+    "conditions": {
+      "title": "Inputs Conditions",
+      "description": "Conditions that drive input flows",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kvps": {
+          "type": "string",
+          "title": "Key Value Pairs",
+          "description": "key/value combinations the define when a conditional input should result in a prompt.",
+          "default": "",
+          "examples": [
+            "env:dev", "env:dev,sky:blue"
+          ]
+        }
+      }
+    }
+  }
+}

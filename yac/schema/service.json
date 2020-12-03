@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Service",
+  "description": "schema for yac services",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "Artifacts": {
+      "type": "array",
+      "description": "an array service artifact objects, each per artifacts.json."
+    },
+    "Credentialers": {
+      "type": "array",
+      "description": "an arrayof service credentialers, each per credentialers.json."
+    },
+    "Description": {
+      "type": "object",
+      "description": "service description, per description.json."
+    },
+    "includes": {
+      "type": "object",
+      "description": "a dictionary of included services, per includes.json."
+    },
+    "Inputs": {
+      "type": "array",
+      "description": "an array of service input objects (each resulting in user prompts), each per inputs.json."
+    },
+    "InputsCache": {
+      "type": "object",
+      "description": "inputs cache object, each per inputs_cache.json."
+    },
+    "IntegrationTests": {
+      "type": "object",
+      "description": "service integration tests, per integration_tests.json."
+    },
+    "Params": {
+      "type": "object",
+      "description": "service constants, per params.json."
+    },
+    "Pipeline": {
+      "type": "object",
+      "description": "service pipeline stages, per pipeline.json."
+    },
+    "Secrets": {
+      "type": "object",
+      "description": "service secrets (where each references a path in a vault ), per secrets.json."
+    },
+    "Stack": {
+      "type": "object",
+      "description": "service instracture definition, per stack.json."
+    },
+    "Vaults": {
+      "type": "array",
+      "description": "an array of valut objects (places where service secrets are stashed), each per secret_vaults.json."
+    },
+    "Tasks": {
+      "type": "array",
+      "description": "and array of objects describing maintenance or configuration tasks that can be performed against a running service, each per tasks.json."
+    }
+  }
+}

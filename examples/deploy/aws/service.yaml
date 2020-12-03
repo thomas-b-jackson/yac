@@ -1,0 +1,36 @@
+Description:
+  name: yac/aws-example
+  default-alias: aws-example
+  summary: Builds an ASG with an IAM role in an arbirtrary Nordstrom AWS v2 account
+  details:
+  - Build this service using the ala-carte 'yac stack' command.
+  - Requires that your know: 1) the name of AWS account you have access to, and '
+  -                          2) the name of a key pair you can use for ssh access"
+  - Try it out as
+  -   $ yac stack examples/stack/aws/service.yaml
+  -
+  - Next, try exporting the service and adding an ELB!
+InputsCache:
+  enabled: true
+  exclusions: ['env']
+includes:
+  inputs:
+    comment: Inputs associated with this service
+    value: includes/inputs.json
+  params:
+    comment: Constants associated with this service
+    value: includes/params.json
+  credentialers:
+    comment: Credentialers associated with this service
+    value: "../../creds/aws/service.yaml"
+Stack:
+  type: aws-cloudformation
+  Resources:
+    MyAppIAMRole:
+      yac-include: resources/iam.json
+    MyAppASG:
+      yac-include: resources/asg.json
+    MyAppSG:
+      yac-include: resources/sg.json
+    MyAppLaunchConfig:
+      yac-include: resources/launchconfig.json

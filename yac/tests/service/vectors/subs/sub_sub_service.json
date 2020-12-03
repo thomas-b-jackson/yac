@@ -1,0 +1,20 @@
+{
+  "Description": {
+    "name": "nordstrom/sub-sub",
+    "default-alias": "sub-sub",
+    "summary": "An included service. Doesn't do much."
+  },
+  "Stack": {
+    "type": "aws-cloudformation",
+    "Resources": {
+      "task-definition-3": {
+        "containers": [
+          {
+            "name": "artifactory",
+            "image": "dot/artifactory:6.4"
+          }
+        ]
+      }
+    }
+  }
+}

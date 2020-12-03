@@ -1,0 +1,6 @@
+Vaults:
+- type: keepass
+  name: main
+  configs:
+    vault-path: vaults/my_vault.kdbx
+    vault-pwd: open_sesame

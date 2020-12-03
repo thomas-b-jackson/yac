@@ -1,0 +1,18 @@
+yac/cli/.ver
+yac/lib/customizations
+!yac/lib/customizations/__init__.py
+yac/config/.DS_Store
+build
+tmp
+yac/tests/tmp
+dist
+yac.egg-info
+*.pyc
+.DS_Store
+yac/.DS_Store
+.cache
+
+# virutal env stuff
+.Python
+bin/
+include/

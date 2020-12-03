@@ -1,0 +1,8 @@
+{
+    "description": ["Measure Jira latency via the login page and post via the 'jira_login' metric.",
+                "Include the HTTP status code with each measurement and post via the 'jira_login_status_code' metric"],
+    "latency-metric": "jira_login",
+    "url": "https://jiradev.nordstrom.net/login.jsp",
+    "period-mins": {"yac-ref": "latency-sample-period"},
+    "status-metric": "jira_login_status_code"
+}

@@ -1,0 +1,27 @@
+Description:
+  name: yac/aws-creds-example
+  default-alias: aws-creds-example
+  summary: Create AWS credentials
+  details:
+  - Try it out as
+  -  $ yac creds examples/creds/aws/service.yaml aws
+  - The credentailer will prompt you for your LAN password and cache the results
+  -    to a local file.
+  - New credentials won't be created if existing credentials are 'fresh' (<1 hr old)
+  - To force new credentials creation, add a -o flag to the yac creds call
+Credentialers:
+- type: nordstrom-aws
+  # this is the "key" for this credentialer, and thus the 3rd arg you
+  # supply to the yac creds command
+  name: aws
+  accounts:
+  - profile: someaccount
+    name:
+      yac-ref: aws-account-name
+    default: true
+  Inputs:
+  - key: aws-account-name
+    title: AWS Account Name
+    help: The name of the AWS account to build to (e.g. NORD-NonProd_DOTS-DevUsers-Team)
+    type: string
+    required: true

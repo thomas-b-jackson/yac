@@ -1,0 +1,12 @@
+{
+  "Inputs": [
+    {
+      "key": "env",
+      "title": "Environment",
+      "help":  "The environment to build",
+      "type": "string",
+      "required": true,
+      "options": ["dev","prod"]
+    }
+  ]
+}

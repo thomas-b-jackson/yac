@@ -1,0 +1,15 @@
+{
+  "Params": {
+    "naming-convention": {
+      "comment": "name resources by concatenating the service alias with the env",
+      "value": {
+          "param-keys": ["service-alias","env"],
+          "delimiter": "-"
+      }
+    },
+    "horizontal-scale": {
+      "comment": "desired number of pods",
+      "value": 1
+    }
+  }
+}

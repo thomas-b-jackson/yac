@@ -1,0 +1,51 @@
+
+YAC - Your Automated Cloud v{VER}
+{COMMAND}
+
+Available comands include:
+
+  yac {COMMAND} (-h | primer)
+
+-h provides api help
+primer will display this page
+
+Deploy a service via a pipeline.
+
+A pipeline typically involves the contruction of a binary, followed by the deployment of the binary through a series of stages, e.g.:
+
+* dev
+* test
+* prod
+
+Each stage is typically made up of two phases:
+
+* build
+* test
+
+The build phase creates the infrastructure needed to support the binary, and deploys the binary to the instrastructure.
+
+The test phase runs a series of integration tests against the service in the stage.
+
+If the tests pass in a stage, the pipeline advances to the next stage in the pipeline.
+
+Say you want to deploy the 'platformengineering/redis:4.6' service from dev to production.
+
+Do a dry run of the pipeline as:
+
+$ yac deploy platformengineering/redis:4.6 --dryrun
+
+If all goes well, run the pipeline as:
+
+$ yac deploy platformengineering/redis:4.6
+
+You can alternatively deploy individual stages as:
+
+$ yac deploy platformengineering/redis:4.6 --stages=dev
+
+.. or to stage groups as:
+
+$ yac deploy platformengineering/redis:4.6 --stages=dev,test
+
+Finally, you can deploy multiple versions of the same service to one or more stages by specifying a unique alias for each, as:
+
+$ yac deploy platformengineering/redis:4.6 --alias myredis --stages=dev,test

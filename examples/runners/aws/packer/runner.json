@@ -1,0 +1,30 @@
+{
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "us-west-2",
+      "source_ami": {"yac-ref": "cis-hardened-ubuntu-ami"},
+      "instance_type": "t2.large",
+      "ssh_username": "ubuntu",
+      "ami_name": {"yac-join": ["-",[{"yac-name": ""},{"yac-ref": "gitlab-version"}]]},
+      "force_deregister": true,
+      "ami_description": "Yac Runner",
+      "vpc_id": {"yac-calc": ["vpc-id"]},
+      "subnet_id": {"yac-calc": ["subnet-id","internal","us-west-2a"]},
+      "tags": {
+        "application": "yac-runner",
+        "version": {"yac-ref": "gitlab-version"},
+        "os": "ubuntu",
+        "os_release": "16.04",
+        "Name": {"yac-join": ["-",[{"yac-name": ""},{"yac-ref": "gitlab-version"}]]}
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "./runner.sh",
+      "environment_vars": [{"yac-join": ["",["GITLAB_VER=",{"yac-ref": "gitlab-version"}]]}]
+    }
+  ]
+}

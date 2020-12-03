@@ -1,0 +1,26 @@
+
+YAC - Your Automated Cloud v{VER}
+
+usage: yac [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  yac (-h | primer)
+  yac <command> (-h | primer)
+  yac <command> <subcommand> (-h | primer)
+
+-h will provide api help at each level
+primer will provide deeper help on the intent of each command
+
+Available commands include
+
+{COMMANDS}
+
+You a service provider?
+
+Provision an existing service using the *deploy* command.
+
+You a service developer?
+
+Build and test your service using the *stack* and *test* commands.
+
+Share your service with the *service* command

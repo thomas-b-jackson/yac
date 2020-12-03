@@ -1,0 +1,7 @@
+build:
+  tags:
+    - yac
+  script:
+    - source .yac
+    - yac creds service.yaml builder
+    - yac deploy service.yaml --kvps=vault-pwd:$VAULT_PWD

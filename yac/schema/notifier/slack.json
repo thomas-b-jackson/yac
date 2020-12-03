@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "SlackNotifier",
+  "description": "Slack notifier",
+  "definitions": {},
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "api-key": {
+      "type": ["string","object"],
+      "title": "API Key",
+      "description": "api key for slack auth",
+      "default": "",
+      "examples": [
+        "LKJAFDAOIUOWRLKOPUIWEROISDFOIO",
+        {"yac-ref": "slack-api-key"}
+      ]
+    },
+    "info-channel": {
+      "type": "string",
+      "title": "Info Channel",
+      "description": "Channel where info events should be sent",
+      "default": "",
+      "examples": [
+        "myteam-pipeline-info"
+      ]
+    },
+    "warning-channel": {
+      "type": "string",
+      "title": "Warning Channel",
+      "description": "Channel where warning events should be sent",
+      "default": "",
+      "examples": [
+        "myteam-pipeline-warning"
+      ]
+    }
+  }
+}
+

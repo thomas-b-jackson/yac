@@ -1,0 +1,23 @@
+
+YAC - Your Automated Cloud v{VER}
+{COMMAND}
+
+Available comands include:
+
+  yac {COMMAND} (-h | primer)
+
+* -h provides api help
+* primer will display this page
+
+View the parameters (aka params) made available from a given Servicefile
+
+The params include:
+* constants defined in Params stanza, and
+* input responses, and
+* secrets pull from vaults
+
+The  params can be rendered into any json or yaml files in your service using the the yac-ref intrinsic, and can be rendered into any other text file using yac-ref templates.
+
+See also (in the yac wiki):
+* yac-ref intrinsics
+* yac-ref templates

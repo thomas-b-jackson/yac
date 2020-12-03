@@ -1,0 +1,26 @@
+Description:
+  name: yac/interesting-artillery-demo
+  default-alias: interesting-artillery-demo
+  summary: Demo of an interesting artillery-based integration test orchestrated through
+    yac
+  details:
+  - Test details are per IntegrationTests.tests[0].description field below
+  - IntegrationTests must satisfy the schema at yac/schema/integration_tests.json
+  - try it out using:
+  - $ yac test examples/test/artillery/interesting/service.yaml
+IntegrationTests:
+  tests:
+  - name: get-elevation
+    description:
+    - Queries the open-elevation api (returns an elevation for a lat/long query)
+    target: https://api.open-elevation.com
+    artillery:
+      config: "./test-elevation.yaml"
+      assertions:
+        comment:
+        - assert against aggregated latency stats and status codes
+        p95_sec: '60'
+        median_sec: '10'
+        error_count: '0'
+        status:
+        - '200'

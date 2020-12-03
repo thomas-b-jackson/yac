@@ -1,0 +1,28 @@
+Description:
+  name: yac/k8s-creds-example
+  default-alias: k8s-creds-example
+  summary: Create k8s credentials
+  details:
+  - Try it out as
+  -  $ yac creds examples/creds/k8s/service.yaml k8s
+  - The credentialer creates a ~/.kube/config file, with a default
+  -    namespace per your input.
+  - New credentials won't be created if the tokens in ~/.kube/config are 'fresh' (<1 day old)
+  - To force new credentials creation, add a -o flag to the yac creds call
+Credentialers:
+- type: nordstrom-k8s
+  # this is the "key" for this credentialer, and thus the 3rd arg you
+  # supply to the yac creds command
+  name: k8s
+  namespace:
+    yac-ref: namespace
+  clusters:
+  - nonprod
+  - prod1
+  Inputs:
+  - key: namespace
+    title: K8s Namespace
+    help: A namespace in the nonprod (hydrogen) and prod1 (hydrogen) clusters  you
+      have write access to
+    type: string
+    required: true
